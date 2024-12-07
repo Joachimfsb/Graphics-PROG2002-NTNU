@@ -17,6 +17,8 @@ Board::Board() {
     auto vb = std::make_shared<VertexBuffer>(chessBoardVertices.data(), chessBoardVertices.size() * sizeof(chessBoardVertices[0]));
     BufferLayout vboLayout = {
         {ShaderDataType::Float2, "v_Position"}
+        //{ShaderDataType::Float4, "a_Color"},
+        //{ShaderDataType::Float2, "a_TextureCoords"}
     };
     vb->SetLayout(vboLayout);
     
@@ -27,7 +29,7 @@ Board::Board() {
     vertexArray->SetIndexBuffer(ib);
 
     // Shader
-    shader = std::make_shared<Shader>(CB_VERTEX_SHADER, CB_FRAGMENT_SHADER);
+    floor_shader = std::make_shared<Shader>(CB_VERTEX_SHADER, CB_FRAGMENT_SHADER);
 
     // Model
     modelMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), {0.0f, 0.0f, 1.0f});
@@ -38,11 +40,11 @@ Board::Board() {
 void Board::Draw(glm::mat4 cameraModel, Pos markedSquare) {
 
     vertexArray->Bind();          
-    shader->Bind();
+    floor_shader->Bind();
 
-    shader->UploadUniformMatrix4("u_Model", modelMatrix);
-    shader->UploadUniformMatrix4("u_ViewProjection", cameraModel);
-    shader->UploadUniformInt2("u_markedSquare", markedSquare.x, markedSquare.y);
-    shader->UploadUniformInt2("u_gridLayout", BOARD_COLS, BOARD_ROWS);
+    floor_shader->UploadUniformMatrix4("u_Model", modelMatrix);
+    floor_shader->UploadUniformMatrix4("u_ViewProjection", cameraModel);
+    floor_shader->UploadUniformInt2("u_markedSquare", markedSquare.x, markedSquare.y);
+    floor_shader->UploadUniformInt2("u_gridLayout", BOARD_COLS, BOARD_ROWS);
     RenderCommands::DrawIndex(vertexArray, GL_TRIANGLES);
 }

@@ -24,10 +24,6 @@ class Assignment : public Framework::GLFWApplication {
 private:
     std::vector<Piece> player;
     std::shared_ptr<Board> board;
-    TextureManager* textureManager;
-    std::shared_ptr<Shader> floorShader;
-    std::shared_ptr<Shader> wallShader;
-    GLint floorTexture;
     GLint wallTexture;
 
 
@@ -54,6 +50,7 @@ private:
 
     Piece* getPieceAtPos(Board::Pos p);
 public:
+    bool texture_bool = false;
     Board::Pos markedSquare;
     std::vector<Piece> pillars;
     std::vector<Piece> boxes;

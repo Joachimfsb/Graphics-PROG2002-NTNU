@@ -23,10 +23,11 @@ class Board {
 
   private:
     std::shared_ptr<Framework::VertexArray> vertexArray;
-    std::shared_ptr<Framework::Shader> shader;
     glm::mat4 modelMatrix;
+    GLint floorTexture;
 
   public:
+  std::shared_ptr<Framework::Shader> floor_shader;
     Board();
     ~Board() {}
 

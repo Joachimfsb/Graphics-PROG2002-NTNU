@@ -21,6 +21,11 @@
 #include <cstdlib>
 #include <ctime>
 
+#ifndef TEXTURES_DIR
+#define TEXTURES_DIR "./"
+#endif
+
+
 using namespace Framework;
 
 bool moveBox(std::vector<Piece>& boxes, const std::vector<Piece>& pillars, const std::vector<Piece>& pieces, const std::vector<DesLoc>& desLoc, const Board::Pos& markedSquare, const std::string& way);
@@ -122,6 +127,18 @@ void Assignment::parseInput() {
                         glfwSetWindowShouldClose(window, GLFW_TRUE);
                         return true;
 
+                    case GLFW_KEY_T:
+                    {
+                        texture_bool = !texture_bool;
+                        if(texture_bool){
+                            std::cout << "Texture ON" << std::endl;
+                        }
+                        else{
+                            std::cout << "Texture OFF" << std::endl;
+                        }
+                        return true;
+                    }
+
                     /////// KEYS THAT CAN BE HELD ////////           
                     // Move camera //
                     // Rotate
@@ -161,6 +178,7 @@ bool Assignment::Init() {
 
     // Create board
     board = std::make_shared<Board>();
+
 
     // Blue team: Pieces are only placed within the inner part of the board
     for (int i = BOARD_ROWS - 10; i < BOARD_ROWS; i++) {
@@ -342,6 +360,10 @@ bool Assignment::Init() {
 
 // Main rendering loop
 void Assignment::Run() {
+
+    glEnable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     // Background color
     RenderCommands::SetClearColor(glm::vec4(0.5, 0.5, 0.5, 1.0));
 
@@ -360,6 +382,7 @@ void Assignment::Run() {
 
         // Clear screen
         RenderCommands::Clear();
+
 
         // Draw board
         board->Draw(camera->GetViewProjectionMatrix(), markedSquare);
