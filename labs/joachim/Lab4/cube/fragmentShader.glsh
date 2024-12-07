@@ -1,0 +1,17 @@
+#include <string>
+
+const std::string FRAGMENT_PROGRAM = R"(
+    #version 430 core
+
+    in vec3 v_Position;
+    layout(binding = 0) uniform samplerCube cubeTexture;
+    uniform vec4 shader_color;
+
+    out vec4 color;
+
+    void main()
+    {
+        color = mix(shader_color, texture(cubeTexture, v_Position), 0.8);
+        color = vec4(color.xyz, 0.5);
+    }
+    )";

@@ -1,0 +1,27 @@
+#include <string>
+
+const std::string VERTEX_PROGRAM = R"(
+#version 430 core
+
+layout(location = 0) in vec2 shader_position;  // Position input
+layout(location = 1) in vec4 shader_color;      // Color input
+layout(location = 2) in vec2 texture_coords;    // Texture coordinates input
+
+out vec2 v_PositionJ;       // Output position to fragment shader
+out vec2 v_TextureCoordsJ;  // Output texture coordinates to fragment shader
+flat out vec4 v_ColorJ;     // Output color to fragment shader
+
+uniform mat4 u_ModelMatrix;
+uniform mat4 u_ViewMatrix;
+uniform mat4 u_ProjectionMatrix;
+
+void main()
+{
+    // Calculate final position of the vertex
+    gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_ModelMatrix * vec4(shader_position, 0.0f, 1.0f);
+
+    v_PositionJ = shader_position;  // Pass position to fragment shader
+    v_ColorJ = shader_color;        // Pass color to fragment shader
+    v_TextureCoordsJ = texture_coords; // Pass texture coordinates
+}
+    )";

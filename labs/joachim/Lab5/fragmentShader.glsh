@@ -1,0 +1,36 @@
+#include <string>
+
+const std::string FRAGMENT_PROGRAM = R"(
+    #version 430 core
+
+    in vec4 v_Position;
+    in vec4 v_fragPosition;
+    in vec4 v_NormalVec;
+
+    layout(binding = 0) uniform samplerCube cubeTexture;
+    uniform vec4 shader_color;
+    uniform vec3 u_lightSourcePosition;
+    uniform float u_diffuseStrength;
+    uniform float u_ambientStrength = 1.0f;
+
+    out vec4 color;
+
+    uniform vec3 u_cameraPosition; // This will be used for specular illumination
+    uniform float u_specularStrength = 0.5f;
+
+    
+    void main()
+    {
+        color = mix(shader_color, texture(cubeTexture, v_Position.xyz), 1.0f);
+        vec3 lightDirection = normalize(vec3(u_lightSourcePosition - v_fragPosition.xyz));
+
+        float diffuseStrength = max(dot(lightDirection, v_NormalVec.xyz), 0.0f) * u_diffuseStrength;
+
+        vec3 reflectedLight = normalize(reflect(-lightDirection, v_NormalVec.xyz));
+        vec3 observerDirection = normalize(u_cameraPosition - v_fragPosition.xyz);
+        float specFactor = pow(max(dot(observerDirection, reflectedLight), 0.0), 12);
+        float specular = specFactor * u_specularStrength;
+
+        color = vec4(color.rgb, 1.0) * (u_ambientStrength + diffuseStrength + specular);
+    }
+    )";

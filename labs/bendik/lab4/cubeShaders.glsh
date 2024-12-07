@@ -1,0 +1,39 @@
+#include <string>
+
+const std::string CUBE_FRAGMENT_SHADER = R"(
+    #version 430 core
+
+    in vec3 v_Position;
+
+    layout(binding = 1) uniform samplerCube uTexture;
+    uniform vec4 u_Color;
+
+    out vec4 color;
+
+    void main()
+    {
+        color = mix(u_Color, texture(uTexture, v_Position), 0.8);
+        color = vec4(color.xyz, 0.5);
+    }
+    )";
+
+
+
+const std::string CUBE_VERTEX_SHADER = R"(
+    #version 430 core
+
+    layout(location = 0) in vec3 a_Position;
+
+    uniform mat4 u_Model;
+    uniform mat4 u_View;
+    uniform mat4 u_Projection;
+
+    out vec3 v_Position;
+
+    void main()
+    {
+        gl_Position = u_Projection * u_View * u_Model * vec4(a_Position, 1.0f);
+
+        v_Position = a_Position;
+    }
+    )";

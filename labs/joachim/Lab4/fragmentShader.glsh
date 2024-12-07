@@ -1,0 +1,29 @@
+#include <string>
+
+const std::string FRAGMENT_PROGRAM = R"(
+    #version 430 core
+
+    in vec2 v_TextureCoordsJ;
+    in vec2 v_PositionJ;
+    flat in vec4 v_ColorJ;
+
+    layout(binding = 0) uniform sampler2D u_floorTextureSampler;
+    uniform ivec2 u_markedSquare;
+    uniform uint u_rows;
+    uniform uint u_cols;
+
+    out vec4 color;
+
+    void main()
+    {
+        vec2 gridLayout = vec2(u_rows, u_cols);
+        vec2 currentSquare = ((v_PositionJ + 1) / 2) * gridLayout - 1;
+
+        if (ivec2(currentSquare) == u_markedSquare) {
+            color = vec4(1.0, 0.0, 0.0, 1.0);
+        } else {
+            color = mix(v_ColorJ, texture(u_floorTextureSampler, v_TextureCoordsJ), 0.9);
+        }
+    }
+    )";
+

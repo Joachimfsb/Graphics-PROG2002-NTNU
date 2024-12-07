@@ -1,0 +1,47 @@
+#include <string>
+
+const std::string CB_FRAGMENT_SHADER = R"(
+    #version 430 core
+
+    flat in vec2 v_Position;
+
+    uniform ivec2 u_markedSquare;
+    uniform ivec2 u_gridLayout;
+
+    out vec4 color;
+
+    void main()
+    {
+        vec2 gridLayout = vec2(u_gridLayout); // Convert to float
+        ivec2 currentSquare = ivec2(round(((v_Position + 1) / 2) * gridLayout - 1)); // Interpolate position-x/y between 0 and *number of rows/cols*
+
+        if (currentSquare == u_markedSquare) {
+            color = vec4(0.0, 1.0, 0.0, 1.0);
+        } else if (mod(currentSquare.x + currentSquare.y, 2) == 0) {
+            color = vec4(1.0, 1.0, 1.0, 1.0);
+        } else {
+            color = vec4(0.0, 0.0, 0.0, 1.0);
+        }
+    }
+    )";
+
+
+
+const std::string CB_VERTEX_SHADER = R"(
+    #version 430 core
+
+    layout(location = 0) in vec2 a_Position;
+    
+    flat out vec2 v_Position;
+
+    uniform mat4 u_Model;
+    uniform mat4 u_ViewProjection;
+
+
+    void main()
+    {
+        gl_Position = u_ViewProjection * u_Model * vec4(a_Position, 0.0f, 1.0f);
+
+        v_Position = a_Position;
+    }
+    )";

@@ -1,0 +1,36 @@
+#include <string>
+
+const std::string FRAGMENT_PROGRAM = R"(
+    #version 430 core
+
+    in vec4 gl_FragCoord;
+    uniform ivec2 u_markedSquare;
+    uniform uint u_rows;
+    uniform uint u_cols;
+    uniform int u_windowWidth;
+    uniform int u_windowHeight;
+    out vec4 color;
+
+    float mapRangeX(float x) {
+        return (u_cols*x)/u_windowWidth;
+    }
+    float mapRangeY(float y) {
+        return (u_rows*y)/u_windowHeight;
+    }
+
+    void main()
+    {
+        float x = gl_FragCoord.x;
+        float y = gl_FragCoord.y;
+
+        if ((mod(mapRangeX(x), 2) < 1 && mod(mapRangeY(y), 2) < 1) || (mod(mapRangeX(x), 2) >= 1 && mod(mapRangeY(y), 2) >= 1)) {
+            color = vec4(0.0, 0.0, 0.0, 1.0);
+        } else {
+            color = vec4(1.0, 1.0, 1.0, 1.0);
+        }
+
+        if (int(mapRangeX(x)) == u_markedSquare.x && int(mapRangeY(y)) == u_markedSquare.y) {
+            color = vec4(1.0, 0.0, 0.0, 1.0);
+        }
+    }
+    )";
