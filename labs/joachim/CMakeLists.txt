@@ -1,3 +1,4 @@
+add_subdirectory(exam23)
 add_subdirectory(lab1)
 add_subdirectory(lab2)
 add_subdirectory(lab2-fix)
