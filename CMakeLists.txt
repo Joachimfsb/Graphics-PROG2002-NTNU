@@ -64,9 +64,7 @@ add_subdirectory(examples/example_5)
 
 # Add a subdirectory for a labs. This line is commented out, possibly because the
 # labs is either under development or optional.
-add_subdirectory(labs/bendik)
 add_subdirectory(labs/joachim)
-
 #add_subdirectory(labs/joachim/lab1/Lab1-task2&3)
 
 # Add a subdirectory for a framework. This line is commented out, possibly because the
